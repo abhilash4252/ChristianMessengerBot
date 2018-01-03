@@ -1,0 +1,21 @@
+{
+  "name": "facebook_bot",
+  "version": "1.0.0",
+  "description": "Facebook Messenger Bot for Christian",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "AK",
+  "license": "ISC",
+  "engines": {
+    "node": "8.4.0"
+  },
+  "dependencies": {
+    "apiai": "^4.0.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "ngrok": "^2.2.24",
+    "request": "^2.83.0"
+  }
+}
