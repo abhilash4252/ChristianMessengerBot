@@ -5,15 +5,15 @@ const FACEBOOK_ACCESS_TOKEN = 'EAAVRhfRwxYABAK8CfHpWEbpyKJVJmtvSbsq5eJaEwJAjJUZB
 
 const request = require('request');
 const sendTextMessage = (senderId, text) => {
- request({
- url: 'https://graph.facebook.com/v2.6/me/messages',
- qs: { access_token: FACEBOOK_ACCESS_TOKEN },
- method: 'POST',
- json: {
- recipient: { id: senderId },
- message: { text },
- }
- });
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: { access_token: FACEBOOK_ACCESS_TOKEN },
+    method: 'POST',
+    json: {
+      recipient: { id: senderId },
+      message: { text },
+    }
+  });
 };
 
 module.exports = (event) => {
