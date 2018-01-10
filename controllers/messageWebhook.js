@@ -6,6 +6,9 @@ module.exports = (req, res) => {
         if (event.message && event.message.text) {
           processMessage(event);
         }
+        else if(event.postback && event.postback.payload) {
+          processMessage(event)
+        }
       });
     });
     res.status(200).end();
