@@ -3,11 +3,10 @@ const apiAiClient = require('apiai')(API_AI_TOKEN);
 const Game = require('../models/Game');
 const condition = { uuid: 1 };
 const FACEBOOK_ACCESS_TOKEN = 'EAAVRhfRwxYABAK8CfHpWEbpyKJVJmtvSbsq5eJaEwJAjJUZBpGZAndnh3bs1rUOtWnnR0tS4GrosJzKW1r0d40UZB34SOTRxzoSjV3YGinHPqgm9Y0Cwd34VDia7ujUHyHtZCP0oAZBPD0kZChPaMlgmPfzqcZA8yeAF6fE76fjLAZDZD';
-var create_topic
+var create_topic = false
 
 const request = require('request');
 const sendTextMessage = (senderId, text_hash) => {
-  console.log(text_hash);
   request({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: FACEBOOK_ACCESS_TOKEN },
@@ -142,7 +141,7 @@ const formatAndSendMessage = (senderId, text) => {
       doc.save();
     });
 
-   text_hash = {
+    text_hash = {
       'text': 'Ok great, you are a member of the team Gutmenschen now.'
     };
     sendTextMessage(senderId, text_hash);
@@ -158,7 +157,7 @@ const formatAndSendMessage = (senderId, text) => {
       doc.save();
     });
 
-   text_hash = {
+    text_hash = {
       'text': 'Ok great, you are a member of the team Wutburger now.'
     };
     sendTextMessage(senderId, text_hash);
@@ -167,13 +166,6 @@ const formatAndSendMessage = (senderId, text) => {
     sendTextMessage(senderId, text_hash)
   }
 
-  else if(text == 'own_topic' || create_topic) {
-    text_hash = {
-      'text': "Ok. Please describe your topic in one word."
-    }
-    create_topic = true;
-    sendTextMessage(senderId, text_hash);
-  }
   else if(create_topic) {
     text_hash = {
       "text": 'Ok perfect. You are joining the game with following topic: ' + text
@@ -185,12 +177,20 @@ const formatAndSendMessage = (senderId, text) => {
           topic_name: text,
           effects: []
         })
-      doc.save();
+        doc.save();
     });
 
-   sendTextMessage(senderId, text_hash);
+    sendTextMessage(senderId, text_hash);
     text_hash = getAfterTopicSelectionText;
     create_topic = false;
+    sendTextMessage(senderId, text_hash);
+  }
+
+  else if(text == 'own_topic' || create_topic) {
+    text_hash = {
+      'text': "Ok. Please describe your topic in one word."
+    }
+    create_topic = true;
     sendTextMessage(senderId, text_hash);
   }
 
@@ -198,23 +198,40 @@ const formatAndSendMessage = (senderId, text) => {
     var buttons = []
     Game.findOne(condition, function(err, doc) {
       for(var i = 0 ; i < doc.topics.length; i++) {
+        console.log(doc.topics[i].topic_name)
         buttons.push({
           "type":"postback",
-          "payload":doc.topics[i].topic_name,
+          "payload": "selected_topic",
           "title": doc.topics[i].topic_name
         });
       };
-    });
-    text_hash = {
-      "attachment":{
-        "type":"template",
-        "payload":{
-          "template_type":"button",
-          "text": "Ok. Choose one of the following topics.",
-          "buttons": buttons
+      text_hash = {
+        "attachment":{
+          "type":"template",
+          "payload":{
+            "template_type":"button",
+            "text": "Ok. Choose one of the following topics.",
+            "buttons": buttons
+          }
         }
       }
+      sendTextMessage(senderId, text_hash);
+    });
+  }
+  else if(text == "selected_topic") {
+    text_hash = {
+      "text": 'Ok perfect. You are joining the game with following topic: ' + text
     }
+    sendTextMessage(senderId, text_hash);
+    text_hash = getAfterTopicSelectionText;
+    create_topic = false;
+    sendTextMessage(senderId, text_hash);
+  }
+  else if(text == "dont_know") {
+    text_hash = {
+      "text": 'No Problem. I will inform you about incoming effects of other players and when the next phase of game is starting'
+    }
+    sendTextMessage(senderId, text_hash);
   }
   else {
     console.log(create_topic);
