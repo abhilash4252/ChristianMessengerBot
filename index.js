@@ -15,6 +15,16 @@ const messageWebhookController = require('./controllers/messageWebhook');
 app.get('/', verificationController);
 app.post('/', messageWebhookController);
 
+app.set('view engine', 'ejs');
+
+app.get('/home', function(req, res) {
+    res.render('pages/home');
+});
+
+// about page
+app.get('/topics', function(req, res) {
+    res.render('pages/topics');
+});
 
 const Game = require('./models/Game');
 
