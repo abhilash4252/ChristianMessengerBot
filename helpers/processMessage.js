@@ -591,6 +591,8 @@ async function formatAndSendMessage(senderId, text){
               });
             }
 
+            break;
+
           default:
             if(text == 'start') {
               text_hash = {
