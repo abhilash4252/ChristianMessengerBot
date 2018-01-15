@@ -1,0 +1,57 @@
+<!-- views/pages/topic.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../head %>
+</head>
+<body class="container">
+
+<main>
+    <div class="jumbotron">
+        <h3>Gutmenschen Vs Wutburger</h3>
+        <h1><%= team1_score %> : <%= team2_score %></h1>
+
+        <h3>Topic: <%= topic.topic_name %></h4>
+
+
+        <% if(agreed_effects.length > 0) { %>
+        <h4>Agreed Effects: <h4>
+        <% agreed_effects.forEach(function(effect) { %>
+            <li><%=effect.effect_description %> </li>
+            <% }); %>
+        <% } %>
+
+        <% if(dis_agreed_effects.length > 0) { %>
+        <h4>Dis agreed Effects: <h4>
+        <% dis_agreed_effects.forEach(function(effect) { %>
+            <li><%=effect.effect_description %> </li>
+            <% }); %>
+        <% } %>
+
+       <% if(partial_agreed_effects.length > 0) { %>
+        <h4>Partial Agreed Effects: <h4>
+        <% partial_agreed_effects.forEach(function(effect) { %>
+            <li><%=effect.effect_description %> </li>
+            <% }); %>
+        <% } %>
+
+       <% if(partial_dis_agreed_effects.length > 0) { %>
+        <h4>Partial Dis agreed Effects: <h4>
+        <% partial_dis_agreed_effects.forEach(function(effect) { %>
+            <li><%=effect.effect_description %> </li>
+            <% }); %>
+        <% } %>
+
+       <% if(neutral_effects.length > 0) { %>
+        <h4>Neutral Effects: <h4>
+        <% neutral_effects.forEach(function(effect) { %>
+            <li><%=effect.effect_description %> </li>
+            <% }); %>
+        <% } %>
+
+        </div>
+        </main>
+
+</body>
+</html>

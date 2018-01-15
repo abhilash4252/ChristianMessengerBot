@@ -2,12 +2,20 @@
 
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <% include ../head %>
+</head>
 <body class="container">
 
 <main>
     <div class="jumbotron">
-        <h1>This is great</h1>
-        <p>Welcome to templating using EJS</p>
+        <h3>Gutmenschen Vs Wutburger</h3>
+        <h1><%= team1_score %> : <%= team2_score %></h1>
+
+        <h4> Running Topics: </h4>
+        <% topics.forEach(function(topic) { %>
+          <li><a href= <%= "/topics?topic_id=" + topic._id %> > <%=topic.topic_name %></a> </li>
+        <% }); %>
     </div>
 </main>
 
