@@ -285,12 +285,14 @@ async function agreeUserReponseForEffect(topicInfo, effectDescription, user) {
             "text": "Good news. One player accepted your input '" + effect.effect_description + "'. One more and you score a point for your team!"
           }
           sendTextMessage(effect.effect_owner, text_hash);
+          topic.save();
         }
         else if ( effect.state == 'partial_downvote') {
           effect.state = 'neutral'
           text_hash = {
             "text": "Good news. One player accepted your input '" + effect.effect_description + "'. One more and you score a point for your team!"
           }
+          topic.save();
           sendTextMessage(effect.effect_owner, text_hash);
         }
         else if (effect.state == 'partial_upvote' || effect.state == 'neutral') {
@@ -319,13 +321,13 @@ async function agreeUserReponseForEffect(topicInfo, effectDescription, user) {
               "text":  "Congrats you have earned a point for you team!"
             }
             sendTextMessage(effect.effect_owner, text_hash);
+            topic.save();
           });
           updateStateOfUser(effect.effect_owner , 'new')
         }
       }
     });
 
-    topic.save();
   });
 
   updateStateOfUser(user.fb_psid , 'new')
@@ -566,7 +568,6 @@ async function formatAndSendMessage(senderId, text){
               sendTextMessage(senderId, text_hash);
             }
             else if(text == 'existing_topic') {
-              var buttons = []
               Topic.find({}, function(err, topics) {
                 for(var i = 0 ; i < topics.length; i++) {
                   console.log(topics[i].topic_name)
@@ -575,7 +576,9 @@ async function formatAndSendMessage(senderId, text){
                     "payload": topics[i].topic_name,
                     "title": topics[i].topic_name
                   });
-                };
+
+                }
+                ;
                 text_hash = {
                   "attachment":{
                     "type":"template",
@@ -589,6 +592,58 @@ async function formatAndSendMessage(senderId, text){
                 updateStateOfUser(senderId, 'create_state')
                 sendTextMessage(senderId, text_hash);
               });
+            }
+
+            else if(text == 'start') {
+              text_hash = {
+                'text': 'Hey and welcome to the game Gutmenschen vs Wutburger.'
+              };
+              sendTextMessage(senderId, text_hash);
+
+              text_hash = {
+                "attachment":{
+                  "type":"template",
+                  "payload":{
+                    "template_type":"button",
+                    "text": "Which team do you want to join?",
+                    "buttons":[
+                      {
+                        "type":"postback",
+                        "payload":"join_team_1",
+                        "title":"Gutmenschen"
+                      },
+                      {
+                        "type":"postback",
+                        "payload":"join_team_2",
+                        "title":"Wutburger"
+                      }
+                    ]
+                  }
+                }
+              }
+              sendTextMessage(senderId, text_hash)
+            }
+            else if(text == 'join_team_1') {
+              addUsersToTeam(senderId, 'Gutmenschen', 'team1');
+
+              text_hash = {
+                'text': 'Ok great, you are a member of the team Gutmenschen now.'
+              };
+              sendTextMessage(senderId, text_hash);
+
+              text_hash = getAfterJoinReplyButtonPayloads;
+              sendTextMessage(senderId, text_hash)
+            }
+            else if(text == 'join_team_2') {
+              addUsersToTeam(senderId, 'Wutburger', 'team2');
+
+              text_hash = {
+                'text': 'Ok great, you are a member of the team Wutburger now.'
+              };
+              sendTextMessage(senderId, text_hash);
+
+              text_hash = getAfterJoinReplyButtonPayloads;
+              sendTextMessage(senderId, text_hash)
             }
 
             break;
