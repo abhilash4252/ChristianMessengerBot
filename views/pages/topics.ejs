@@ -22,6 +22,14 @@
             <% }); %>
         <% } %>
 
+        <% if(conflicted_effects.length > 0) { %>
+        <h4>Conflicted Effects: <h4>
+        <% conflicted_effects.forEach(function(effect) { %>
+            <li><%=effect.effect_description %> </li>
+            <% }); %>
+        <% } %>
+
+
         <% if(dis_agreed_effects.length > 0) { %>
         <h4>Dis agreed Effects: <h4>
         <% dis_agreed_effects.forEach(function(effect) { %>

@@ -42,6 +42,7 @@ app.get('/topics', function(req, res) {
   partial_dis_agreed_effects = []
   partial_agreed_effects = []
   neutral_effects = []
+  conflicted_effects = []
   Topic.findOne({_id: topicId}, function(err, topic) {
     topic.effects.forEach(function(effect) {
       if(effect.state == 'agreed') {
@@ -61,6 +62,9 @@ app.get('/topics', function(req, res) {
       else if(effect.state == 'neutral') {
         neutral_effects.push(effect);
       }
+      else if(effect.state == 'conflicted_effect') {
+        conflicted_effects.push(effect);
+      }
     });
     res.render('pages/topics',
                {
@@ -71,7 +75,8 @@ app.get('/topics', function(req, res) {
                  dis_agreed_effects: dis_agreed_effects,
                  partial_dis_agreed_effects: partial_dis_agreed_effects,
                  partial_agreed_effects: partial_agreed_effects,
-                 neutral_effects: neutral_effects
+                 neutral_effects: neutral_effects,
+                 conflicted_effects: conflicted_effects
 
                })
   });
@@ -80,18 +85,19 @@ app.get('/topics', function(req, res) {
 
 
 /*
- * const entry = new Game({
- *     uuid: 1,
- *     topics: [],
- *     team1_members: [],
- *     team2_members: [],
- *     team1_score: 0,
- *     team2_score: 0,
- *     effects: [],
- *     system_score: 0
- * });
  *
- entry.save();
+ *  const entry = new Game({
+ *      uuid: 1,
+ *      topics: [],
+ *      team1_members: [],
+ *      team2_members: [],
+ *      team1_score: 0,
+ *      team2_score: 0,
+ *      system_score: 0
+ *  });
+ * 
+ *entry.save();
+ * 
  */
 
 
